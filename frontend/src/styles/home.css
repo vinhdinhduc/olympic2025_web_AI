@@ -1,0 +1,90 @@
+/* .home-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: url('https://source.unsplash.com/1600x900/?education,learning') no-repeat center center/cover;
+    color: white;
+}
+
+.home-content {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    border-radius: 10px;
+}
+
+.home-content h1 {
+    font-size: 40px;
+    font-weight: bold;
+} */
+.home-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 20px;
+  }
+  
+  .image-wrapper img {
+    margin-top: 40px;
+    position: relative;
+    display: inline-block;
+    width: 400px;
+    height: auto;
+    max-width:100% ;
+    border-radius: 10px;
+    
+  }
+  
+  .image-wrapper::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    width: 100px;
+    height: 50px;
+    background: yellow;
+    border-radius: 50%;
+    z-index: -1;
+  }
+  
+  .image-wrapper::after {
+    content: "";
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    width: 100px;
+    height: 50px;
+    background: lightgreen;
+    border-radius: 50%;
+    z-index: -1;
+  }
+  
+
+.btn-custom {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.btn-login {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-login:hover {
+    background-color: #0056b3;
+}
+
+.btn-signup {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-signup:hover {
+    background-color: #1e7e34;
+}
+

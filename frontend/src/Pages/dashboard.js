@@ -16,8 +16,12 @@ const Dashboard = () => {
         axios.get("http://localhost:5000/api/users/me", {
             headers: { Authorization: `Bearer ${token}` },
         })
-        .then((res) => setUser(res.data))
-        .catch(() => {
+        .then((res) => {
+            console.log("Thông tin người dùng:", res.data);
+            setUser(res.data);
+        })
+        .catch((err) => {
+            console.error("Lỗi xác thực:", err.response?.data || err.message);
             localStorage.removeItem("token");
             navigate("/login");
         });
@@ -30,9 +34,16 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard-container">
-            <h2>Chào mừng, {user?.username}!</h2>
-            <p>Bạn đang ở trang Dashboard.</p>
-            <button onClick={handleLogout}>Đăng xuất</button>
+            {user ? (
+                <>
+                    <h2>Chào mừng, {user.username}!</h2>
+                    <p>Email: {user.email}</p>
+                    <p>Vai trò: {user.role}</p>
+                    <button onClick={handleLogout}>Đăng xuất</button>
+                </>
+            ) : (
+                <p>Đang tải thông tin người dùng...</p>
+            )}
         </div>
     );
 };

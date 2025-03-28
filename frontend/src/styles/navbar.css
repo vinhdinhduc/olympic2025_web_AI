@@ -1,0 +1,31 @@
+.navbar {
+    background: linear-gradient(45deg, #007bff, #00c3ff);
+    
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+    
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+      
+      
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: white !important;
+}
+
+.navbar-nav .nav-link {
+    color: white !important;
+    font-size: 18px;
+}
+.navbar img {
+    width: 40px; /* Đặt chiều rộng nhỏ hơn */
+    height: auto; /* Tự động điều chỉnh chiều cao theo tỷ lệ */
+    border-radius: 5px; /* Tùy chọn: Bo góc hình ảnh */
+    margin-right: 10px; /* Tùy chọn: Thêm khoảng cách giữa ảnh và nội dung */
+}

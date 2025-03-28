@@ -5,8 +5,12 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
-const User = require("./src/models/User");   
-const userRoutes = require("./src/routes/userRoutes");
+const User = require("./models/User");
+const userRoutes = require("./routes/userRoutes");
+const exerciseRoutes = require("./routes/exerciseRoutes");
+const authRoutes = require("./routes/auth");
+const {authMiddleware} = require("./middlewares/authMiddleware");
+
 
 const app = express();
 const PORT = 5000;
@@ -14,7 +18,14 @@ const SECRET_KEY = "supersecretkey";
 
 app.use(express.json());
 app.use(cors());  
+app.use("/api/auth", authRoutes); 
 app.use("/api", userRoutes); 
+app.use("/api/exercises", exerciseRoutes);
+// Sử dụng middleware xác thực
+app.use(authMiddleware);
+
+// Routes
+
 
 // Kết nối MongoDB
 mongoose.connect('mongodb://localhost:27017/edu_ai', {
