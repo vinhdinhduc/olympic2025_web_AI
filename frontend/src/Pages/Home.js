@@ -3,9 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import "../styles/home.css"; // Import file CSS
+import "../styles/home.css"; 
 import Footer from '../components/footer';
-import home from '../assets/image/home.jpg';
+import home from '../assets/image/anh_bia.jpg';
 import Navbar from '../components/navbar';
 
 const Home = () => {

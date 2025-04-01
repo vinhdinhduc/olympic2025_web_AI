@@ -16,9 +16,7 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/exercises">Bài tập</Link>
             </li>
-            <li>
-                    <Link to="/exercises/suggested">Bài tập gợi ý</Link>
-                </li>
+            
             <li className="nav-item">
               <Link className="nav-link" to="/profile">Hồ sơ</Link>
             </li>

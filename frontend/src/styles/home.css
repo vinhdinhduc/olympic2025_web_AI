@@ -1,23 +1,4 @@
-/* .home-container {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: url('https://source.unsplash.com/1600x900/?education,learning') no-repeat center center/cover;
-    color: white;
-}
 
-.home-content {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 40px;
-    border-radius: 10px;
-}
-
-.home-content h1 {
-    font-size: 40px;
-    font-weight: bold;
-} */
 .home-container {
     min-height: 100vh;
     display: flex;
