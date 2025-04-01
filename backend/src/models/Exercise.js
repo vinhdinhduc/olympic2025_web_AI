@@ -12,7 +12,8 @@ const exerciseSchema = new mongoose.Schema({
     type: { type: String, required: true, enum: ["multiple-choice", "essay"] },
     questions: { type: [questionSchema], required: true },
     tags: [String],
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    topic: { type: String, required: true }, 
 }, { timestamps: true });
 
 module.exports = mongoose.model("Exercise", exerciseSchema);

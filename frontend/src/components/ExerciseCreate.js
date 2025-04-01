@@ -10,18 +10,37 @@ const ExerciseCreate = () => {
     const [newQuestion, setNewQuestion] = useState({ questionText: "", options: [], correctAnswer: "" });
 
     const handleAddQuestion = () => {
+        if (!newQuestion.questionText || newQuestion.options.length === 0 || !newQuestion.correctAnswer) {
+            alert("Vui lòng nhập đầy đủ thông tin câu hỏi!");
+            return;
+        }
         setQuestions([...questions, newQuestion]);
         setNewQuestion({ questionText: "", options: [], correctAnswer: "" });
     };
 
+    const handleDeleteQuestion = (index) => {
+        const updatedQuestions = questions.filter((_, i) => i !== index);
+        setQuestions(updatedQuestions);
+    };
+
     const handleCreate = async () => {
+        if (!title || !description || questions.length === 0) {
+            alert("Vui lòng nhập đầy đủ thông tin bài tập!");
+            return;
+        }
+
         try {
             const token = localStorage.getItem("token");
-            await axios.post("http://localhost:5000/api/exercises", 
-                { title, description, type, questions }, 
+            await axios.post(
+                "http://localhost:5000/api/exercises",
+                { title, description, type, questions },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             alert("Tạo bài tập thành công!");
+            setTitle("");
+            setDescription("");
+            setType("multiple-choice");
+            setQuestions([]);
         } catch (error) {
             alert("Lỗi tạo bài tập!");
         }
@@ -30,9 +49,9 @@ const ExerciseCreate = () => {
     return (
         <div className="exercise-create-container">
             <h2>Tạo bài tập mới</h2>
-            <input type="text" placeholder="Tiêu đề" value={title} onChange={e => setTitle(e.target.value)} />
-            <textarea placeholder="Mô tả" value={description} onChange={e => setDescription(e.target.value)}></textarea>
-            <select value={type} onChange={e => setType(e.target.value)}>
+            <input type="text" placeholder="Tiêu đề" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <textarea placeholder="Mô tả" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+            <select value={type} onChange={(e) => setType(e.target.value)}>
                 <option value="multiple-choice">Trắc nghiệm</option>
                 <option value="essay">Tự luận</option>
             </select>
@@ -42,28 +61,29 @@ const ExerciseCreate = () => {
                 type="text"
                 placeholder="Nội dung câu hỏi"
                 value={newQuestion.questionText}
-                onChange={e => setNewQuestion({ ...newQuestion, questionText: e.target.value })}
+                onChange={(e) => setNewQuestion({ ...newQuestion, questionText: e.target.value })}
             />
             <textarea
                 placeholder="Các lựa chọn (ngăn cách bằng dấu phẩy)"
                 value={newQuestion.options.join(", ")}
-                onChange={e => setNewQuestion({ ...newQuestion, options: e.target.value.split(",") })}
+                onChange={(e) => setNewQuestion({ ...newQuestion, options: e.target.value.split(",") })}
             ></textarea>
             <input
                 type="text"
                 placeholder="Đáp án đúng"
                 value={newQuestion.correctAnswer}
-                onChange={e => setNewQuestion({ ...newQuestion, correctAnswer: e.target.value })}
+                onChange={(e) => setNewQuestion({ ...newQuestion, correctAnswer: e.target.value })}
             />
             <button onClick={handleAddQuestion}>Thêm câu hỏi</button>
 
             <h3>Danh sách câu hỏi</h3>
-            <ul>
+               <ul>
                 {questions.map((q, index) => (
                     <li key={index}>
                         <strong>{q.questionText}</strong>
                         <p>Lựa chọn: {q.options.join(", ")}</p>
                         <p>Đáp án đúng: {q.correctAnswer}</p>
+                        <button onClick={() => handleDeleteQuestion(index)}>Xóa</button>
                     </li>
                 ))}
             </ul>
@@ -72,5 +92,4 @@ const ExerciseCreate = () => {
         </div>
     );
 };
-
 export default ExerciseCreate;

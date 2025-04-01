@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import "../styles/home.css";
+import "../styles/excercisesList.css";
 
 const ExerciseList = () => {
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/exercises")
-      .then(response => setExercises(response.data))
-      .catch(error => console.error("Lỗi tải bài tập:", error));
+    axios
+      .get("http://localhost:5000/api/exercises")
+      .then((response) => setExercises(response.data))
+      .catch((error) => console.error("Lỗi tải bài tập:", error));
   }, []);
 
   return (
