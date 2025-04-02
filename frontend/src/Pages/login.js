@@ -127,7 +127,7 @@ const Login = () => {
                 </div>
                 </form>
                 <p className="text-center mt-3">
-                    <a href="/forgot-password" className="text-decoration-none">Forgot Password?</a>
+                    <a href="/forgot-password" className="text-decoration-none">Quên mật khẩu?</a>
                 </p>
             </div>
         </div>

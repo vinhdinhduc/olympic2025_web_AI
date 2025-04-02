@@ -1,2 +1,6 @@
 /node_modules
+<<<<<<< HEAD
 .env
+=======
+.env
+>>>>>>> 594dec0 (Recommit clean project without .env)

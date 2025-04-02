@@ -74,7 +74,7 @@
 .input-group-text {
     background: rgba(255, 255, 255, 0.3) !important; /* Nền mờ */
     border: 1px solid rgba(255, 255, 255, 0.4); /* Viền mờ */
-    color: white; /* Màu biểu tượng */
+    color: rgb(20, 19, 19); /* Màu biểu tượng */
     cursor: pointer; /* Con trỏ chuột dạng pointer */
     border-top-left-radius: 0; /* Loại bỏ bo góc bên trái */
     border-bottom-left-radius: 0; /* Loại bỏ bo góc bên trái */

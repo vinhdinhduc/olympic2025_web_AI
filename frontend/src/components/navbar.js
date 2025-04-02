@@ -10,7 +10,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-light">
       <div className="container">
         <img className="" src={logo} alt="" />
-        <Link className="navbar-brand" to="/">EduAI</Link>
+        <Link className="navbar-brand" to="/">EDUCATION AI</Link>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
