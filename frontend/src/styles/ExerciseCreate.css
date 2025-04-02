@@ -1,68 +1,55 @@
 .exercise-create-container {
-    max-width: 800px;
-    margin: 50px auto;
     padding: 20px;
-    background-color: #f8f9fa; /* Màu nền nhẹ */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
-    font-family: Arial, sans-serif;
-}
-
-.exercise-create-container h2 {
-    text-align: center;
-    color: #007bff; /* Màu xanh dương */
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
+  .exercise-create-container h2 {
     margin-bottom: 20px;
-}
-
-.exercise-create-container input,
-.exercise-create-container textarea,
-.exercise-create-container select {
+    color: #333;
+  }
+  
+  .exercise-create-container input,
+  .exercise-create-container textarea,
+  .exercise-create-container select {
     width: 100%;
     padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 16px;
-}
-
-.exercise-create-container textarea {
-    resize: none; /* Không cho phép thay đổi kích thước */
-    height: 100px;
-}
-
-.exercise-create-container button {
+    font-size: 14px;
+  }
+  
+  .exercise-create-container textarea {
+    resize: vertical;
+  }
+  
+  .exercise-create-container button {
+    padding: 10px 15px;
     background-color: #007bff;
-    color: white;
+    color: #fff;
     border: none;
-    padding: 10px 20px;
     border-radius: 5px;
-    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: 10px;
-}
-
-.exercise-create-container button:hover {
-    background-color: #0056b3; /* Màu xanh dương đậm hơn khi hover */
-}
-
-.exercise-create-container ul {
+  }
+  
+  .exercise-create-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  .exercise-create-container ul {
     list-style-type: none;
     padding: 0;
-}
-
-.exercise-create-container ul li {
-    background-color: #e9ecef; /* Màu nền nhẹ cho danh sách */
+  }
+  
+  .exercise-create-container ul li {
+    margin-bottom: 10px;
     padding: 10px;
-    margin: 10px 0;
+    border: 1px solid #ddd;
     border-radius: 5px;
-}
-
-.exercise-create-container ul li strong {
-    color: #343a40; /* Màu chữ đậm */
-}
-
-.exercise-create-container ul li p {
-    margin: 5px 0;
-    color: #6c757d; /* Màu chữ nhẹ */
-}
+    background-color: #f1f1f1;
+  }

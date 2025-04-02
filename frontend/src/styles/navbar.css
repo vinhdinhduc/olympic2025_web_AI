@@ -24,8 +24,9 @@
     font-size: 18px;
 }
 .navbar img {
-    width: 40px; /* Đặt chiều rộng nhỏ hơn */
-    height: auto; /* Tự động điều chỉnh chiều cao theo tỷ lệ */
-    border-radius: 5px; /* Tùy chọn: Bo góc hình ảnh */
+    width: 100px; /* Đặt chiều rộng nhỏ hơn */
+    height: 50px;
+   
+    border-radius: 50%; /* Tùy chọn: Bo góc hình ảnh */
     margin-right: 10px; /* Tùy chọn: Thêm khoảng cách giữa ảnh và nội dung */
 }

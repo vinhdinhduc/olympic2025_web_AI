@@ -5,12 +5,13 @@ import Login from './Pages/login';
 import Dashboard from './Pages/dashboard';
 import ExerciseList from './components/ExerciseList';
 import ExerciseCreate from './components/ExerciseCreate';
-import QuizPage from "./Pages/QuizPage";
+// import QuizPage from "./Pages/QuizPage";
 import Profile from './Pages/Profile';
 import Home from './Pages/Home';
 import SuggestedExercises from "./Pages/SuggestedExercises";
 import SubmitExercise from "./Pages/SubmitExercise";
 import ExplainProblem from "./Pages/ExplainProblem";
+import ExerciseDetail from "./components/ExerciseDetail";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -18,6 +19,8 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token); // Chuyển thành true nếu có token
+   
+    
   }, []);
 
   return (
@@ -25,7 +28,7 @@ function App() {
   <Routes>
   <Route path="/" element={<Home />} />
   <Route path="/exercises" element={<ExerciseList />} />
-        <Route path="/exercise/:id" element={<QuizPage />} />
+        <Route path="/exercise/:id" element={<ExerciseDetail />} />
         <Route path="/profile" element={<Profile />} />
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />
