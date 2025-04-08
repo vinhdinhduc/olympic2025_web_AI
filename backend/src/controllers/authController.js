@@ -78,4 +78,20 @@ const getUserProfile = async (req, res) => {
     }
 };
 
-module.exports = { register, login, getUserProfile };
+const validate = (req,res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+        return res.status(401).json({valid:false, message: "Token không hợp lệ!" });
+    }
+    try {
+        jwt.verify(token,process.env.JWT_SECRET)
+        res.json({valid: true,})
+    } catch (error) {
+        res.status(401).json({
+            valid: false,
+            message: "Token không hợp lệ!"
+        })
+    }
+}
+
+module.exports = { register, login, getUserProfile ,validate };

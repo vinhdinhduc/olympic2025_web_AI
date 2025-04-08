@@ -13,7 +13,7 @@ const Dashboard = () => {
             return;
         }
 
-        axios.get("http://localhost:5000/api/users/me", {
+        axios.get("http://localhost:5000/api/me", {
             headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {

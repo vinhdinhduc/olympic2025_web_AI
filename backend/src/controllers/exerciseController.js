@@ -10,24 +10,78 @@ const { OpenAIApi, Configuration } = require("openai");
 // 🟢 Tạo bài tập mới
 const createExercise = async (req, res) => {
     try {
-        const { title, description, type, questions, tags, topic } = req.body;
-
+        const { title, description, type, topic, tags } = req.body;
+        
+        // Validate required fields
         if (!title || !type || !topic) {
             return res.status(400).json({ message: "Tiêu đề, loại bài tập và chủ đề là bắt buộc!" });
         }
 
-        const exercise = new Exercise({
+        // Create base exercise object
+        const exerciseData = {
             title,
             description,
             type,
-            questions,
             tags,
             topic,
             createdBy: req.user._id,
-        });
+            createdAt: new Date()
+        };
 
+        // Add type-specific fields
+        switch (type) {
+            case 'multiple-choice':
+                if (!req.body.questions || !Array.isArray(req.body.questions)) {
+                    return res.status(400).json({ message: "Câu hỏi trắc nghiệm là bắt buộc!" });
+                }
+                exerciseData.questions = req.body.questions.map(q => ({
+                    questionText: q.questionText,
+                    options: q.options,
+                    correctAnswer: q.correctAnswer,
+                    points: q.points || 1
+                }));
+                exerciseData.totalPoints = req.body.questions.reduce((sum, q) => sum + (q.points || 1), 0);
+                break;
+
+            case 'essay':
+                if (!req.body.guidelines) {
+                    return res.status(400).json({ message: "Hướng dẫn làm bài là bắt buộc cho bài tự luận!" });
+                }
+                exerciseData.guidelines = req.body.guidelines;
+                exerciseData.wordLimit = req.body.wordLimit || 500;
+                exerciseData.totalPoints = req.body.totalPoints || 10;
+                break;
+
+            case 'practice':
+                if (!req.body.resourcesUrl) {
+                    return res.status(400).json({ message: "URL tài nguyên thực hành là bắt buộc!" });
+                }
+                exerciseData.resourcesUrl = req.body.resourcesUrl;
+                exerciseData.submissionType = req.body.submissionType || 'file'; // file or url
+                exerciseData.totalPoints = req.body.totalPoints || 10;
+                break;
+
+            default:
+                return res.status(400).json({ message: "Loại bài tập không hợp lệ!" });
+        }
+
+        // Add deadline if provided
+        if (req.body.deadline) {
+            exerciseData.deadline = new Date(req.body.deadline);
+        }
+
+        const exercise = new Exercise(exerciseData);
         await exercise.save();
-        res.status(201).json({ message: "Tạo bài tập thành công!", exercise });
+        
+        res.status(201).json({ 
+            message: "Tạo bài tập thành công!", 
+            exercise: {
+                _id: exercise._id,
+                title: exercise.title,
+                type: exercise.type,
+                topic: exercise.topic
+            }
+        });
     } catch (err) {
         console.error("Lỗi khi tạo bài tập:", err);
         res.status(500).json({ message: "Lỗi server!" });

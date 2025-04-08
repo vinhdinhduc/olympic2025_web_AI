@@ -1,6 +1,6 @@
-import React from "react";
+import React ,{ useEffect, useState }from "react";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../styles/home.css"; 
@@ -9,9 +9,45 @@ import home from '../assets/image/anh_bia.jpg';
 import Navbar from '../components/navbar';
 
 const Home = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const userData = JSON.parse(localStorage.getItem("user"));
+    
+        if (token && userData) {
+            axios
+                .get("http://localhost:5000/api/auth/validate-token", {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                .then((response) => {
+                    if (response.data.valid) {
+                        setIsLoggedIn(true);
+                        setUser(userData);
+                    } else {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("user");
+                        setIsLoggedIn(false);
+                        alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                    }
+                })
+                .catch(() => {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                    setIsLoggedIn(false);
+                    alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                });
+        } else {
+            setIsLoggedIn(false);
+        }
+    }, []);
 
     const handleClick = () => {
-        alert("Bạn vui lòng đăng nhập để bắt đầu sử dụng !")
+        if(!isLoggedIn) {
+            alert("Vui lòng đăng nhập để bắt đầu sử dụng!");
+            
+        }
+
     }
   return (
     <><Container fluid className="home-container">
@@ -29,10 +65,10 @@ const Home = () => {
               </Col>
 
               {/* Nội dung */}
-              <Col md={6} className="text-center text-md-start">
+              <Col md={6} className="text-center text-md-start text-container">
                   <h1 className="logo">
-                      <span className="fw-bold text-muted">ĐỨC</span>
-                      <span className="text-success"> VÌNH!</span>
+                      <span className="fw-bold text-muted " style={{fontSize:"2rem"}}>Xin Chào  👋!</span>
+                      <span className="text-success">Đinh Đức Vình</span>
                   </h1>
                   <h2 className="fw-bold mt-2">Chào mừng các bạn đến với nền tảng học tập trực tuyến bằng AI</h2>
                   <p className="text-muted mt-3">
@@ -45,13 +81,19 @@ const Home = () => {
 
                   {/* Nút hành động */}
                   <div className="mt-4">
-                      <Link to="/login">
-                          <Button variant="primary " className="me-2">Login</Button>
-                      </Link>
-                      <Link to="/register">
-                          <Button variant="outline-primary">Register</Button>
-                      </Link>
-                  </div>
+                    {!isLoggedIn ? (
+                     <>
+                     <Link to="/login">
+                        <Button variant="primary " className="me-2">Login</Button>
+                    </Link>
+                    <Link to="/register">
+                        <Button variant="outline-primary">Register</Button>
+                    </Link></>   
+                    ): (
+                        <p></p>
+                    )}
+                    </div>
+                      
 
                   <div className="mt-4">
                       <Button variant="success" onClick={handleClick}>START NOW</Button>

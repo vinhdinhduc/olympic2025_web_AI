@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token); // Chuyển thành true nếu có token
+    setIsAuthenticated(!token); // Chuyển thành true nếu có token
    
     
   }, []);

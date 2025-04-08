@@ -1,0 +1,101 @@
+
+
+/* Hiệu ứng mờ cho form */
+.grow-item {
+    -webkit-box-shadow: 0px 0px 230px 11px rgba(46, 213, 255, 0.84);
+    -moz-box-shadow: 0px 0px 230px 11px rgba(46, 213, 255, 0.84);
+    box-shadow: 0px 0px 230px 11px rgba(46, 213, 255, 0.90);
+}
+
+.animation {
+    color: #0a0909;
+    text-shadow: 0 0 5px #00f, 0 0 10px #00f, 0 0 20px #00f, 0 0 40px #00f;
+    font-weight: bold;
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 5px #00f, 0 0 10px #00f, 0 0 20px #00f, 0 0 40px #00f;
+    }
+    100% {
+        text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff, 0 0 50px #0ff;
+    }
+}
+
+.login-container {
+    margin: 14px;
+    background: rgba(46, 213, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 350px;
+}
+
+.login-container h2 {
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.form-control {
+    background: #fff;
+    border: 1px solid rgba(15, 14, 14, 0.4);
+    color: rgb(10, 10, 10);
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px; /* Tăng khoảng cách để tránh box-shadow */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    user-select: none;
+    z-index: 2; /* Quan trọng: đặt cao hơn input:focus */
+    background: rgba(255, 255, 255, 0.8); /* Nền trong suốt chống lẫn */
+    padding: 0 5px;
+    border-radius: 50%;
+}
+.link-register{
+    text-decoration: none;
+    color: rgb(0, 255, 157);
+}
+ 
+
+.form-control:focus {
+    z-index: 1;
+    border-color: rgb(0, 255, 191);
+   
+}
+
+.btn-login {
+    width: 100%;
+    background-color: #ff4081;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.btn-login:hover {
+    background-color: #e91e63;
+}
+
+.forgot-password {
+    text-align: right;
+    color: white;
+    font-size: 14px;
+    margin-top: 10px;
+}

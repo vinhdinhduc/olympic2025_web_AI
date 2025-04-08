@@ -4,11 +4,11 @@ const UserSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ["student", "teacher"], default: "student" },
+    role: { type: String, enum: ["student", "teacher","admin"], default: "student" },
     completedExercises: [{ type: mongoose.Schema.Types.ObjectId, ref: "Exercise" }]
 }, { timestamps: true });
 
-// ✅ Kiểm tra model trước khi khởi tạo để tránh lỗi OverwriteModelError
+// Kiểm tra model trước khi khởi tạo để tránh lỗi OverwriteModelError
 const User = mongoose.models.User || mongoose.model("User", UserSchema);
 
 module.exports = User;

@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { signInWithGoogle, signInWithGitHub } from "../config/firebase";
 
-import '../styles/auth.css';
+import '../styles/login.css';
 import '../styles/globalstyles.css';
 
 const Login = () => {
@@ -67,8 +67,13 @@ const Login = () => {
             // Lưu token vào localStorage
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("role", response.data.role);
+            localStorage.setItem("user", JSON.stringify({
+                _id: response.data.userId,
+                email: email,
+                role: response.data.role,
+            }));     
     
-            navigate("/dashboard"); // Chuyển đến trang chính
+            navigate("/"); // Chuyển đến trang chính
         } catch (err) {
             setError(err.response?.data?.message || "Đăng nhập thất bại!");
         }
@@ -83,7 +88,7 @@ const Login = () => {
             <div className="card grow-item p-4 bg-bg-secondary-subtle " style={{ width: "400px" }}>
                 <h2 className="text-center mb-3 animation ">ĐĂNG NHẬP </h2>
                 <p className="text-center text-muted">Bạn chưa có tài khoản?
-                    <a href="/register" style={{textDecoration:"none"}}><FontAwesomeIcon icon={faUserPlus}/> Đăng ký </a>
+                    <a href="/register" className='link-register'><FontAwesomeIcon icon={faUserPlus}/> Đăng ký </a>
                 </p>
                 {error && <div className="alert alert-danger">{error}</div>}
                 <form onSubmit={handleSubmit}>
@@ -92,7 +97,7 @@ const Login = () => {
                         <input
                             type="email"
                             className="form-control"
-                            placeholder="Enter email"
+                            placeholder="Nhập email..."
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -103,11 +108,11 @@ const Login = () => {
                             <input
                                 type={showPassword ? "text": "password"}
                                 className="form-control"
-                                placeholder="Enter password"
+                                placeholder="Nhập mật khẩu..."
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <span className="input-group-text" onClick={togglePasswordVisibility} style={{ cursor: "pointer" }}>
+                            <span className="password-toggle" onClick={togglePasswordVisibility} style={{ cursor: "pointer" }}>
                             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                             </span>
                        </div>

@@ -1,71 +1,135 @@
-
+/* Container chính */
 .home-container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 50px 20px;
+}
+
+/* Phần hình ảnh */
+.image-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.image-wrapper img {
+  margin-top: 32px;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 40px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border: 4px solid white;
+  transition: transform 0.3s ease;
+}
+
+.image-wrapper img:hover {
+  transform: scale(1.05);
+}
+
+/* Phần nội dung */
+.logo {
+  font-size: 2.5rem;
+  margin-bottom: 0.8rem;
+  text-align: center;
+}
+.text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  text-align: start;
+}
+
+.text-muted {
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+  font-size: 1rem;
+  text-align: start;
+}
+
+/* Các nút  */
+.btn-action-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.btn-primary, .btn-outline-primary, .btn-success {
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #1a56d9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(46, 109, 255, 0.3);
+}
+
+.btn-outline-primary {
+  color: #2e6dff;
+  border: 2px solid #2eff8c;
+  background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+  background-color: #2eff4a;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(46, 255, 98, 0.3);
+}
+
+.btn-success {
+  background-color: #28a79c;
+  color: white;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 992px) {
+  .home-container {
+      padding: 30px 15px;
+      flex-direction: column;
+      text-align: center;
   }
   
   .image-wrapper img {
-    margin-top: 40px;
-    position: relative;
-    display: inline-block;
-    width: 400px;
-    height: auto;
-    max-width:100% ;
-    border-radius: 10px;
-    
+      max-width: 250px;
   }
   
-  .image-wrapper::before {
-    content: "";
-    position: absolute;
-    top: -20px;
-    left: -20px;
-    width: 100px;
-    height: 50px;
-    background: yellow;
-    border-radius: 50%;
-    z-index: -1;
+  .logo {
+      font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .image-wrapper img {
+      max-width: 180px;
   }
   
-  .image-wrapper::after {
-    content: "";
-    position: absolute;
-    bottom: -20px;
-    right: -20px;
-    width: 100px;
-    height: 50px;
-    background: lightgreen;
-    border-radius: 50%;
-    z-index: -1;
+  .logo {
+      font-size: 1.8rem;
   }
   
-
-.btn-custom {
-    font-size: 18px;
-    padding: 0 20px;
-    margin: 10px;
-    border-radius: 8px;
-    transition: 0.3s;
+  h2 {
+      font-size: 1.2rem;
+  }
+  
+  .btn-primary, .btn-outline-primary, .btn-success {
+      padding: 8px 15px;
+      font-size: 0.9rem;
+  }
 }
-
-.btn-login {
-    background-color: #007bff;
-    color: white;
-}
-
-.btn-login:hover {
-    background-color: #0056b3;
-}
-
-.btn-signup {
-    background-color: #28a745;
-    color: white;
-}
-
-.btn-signup:hover {
-    background-color: #1e7e34;
-}
-
