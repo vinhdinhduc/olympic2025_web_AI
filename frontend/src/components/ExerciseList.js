@@ -1,41 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import "../styles/excercisesList.css";
+import "./excercisesList.css";
 
 const ExerciseList = () => {
   const [exercises, setExercises] = useState([]);
   const [filteredExercises, setFilteredExercises] = useState([]);
   const [selectedType, setSelectedType] = useState("all");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [selectedDifficulty, setSelectedDifficulty] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    const fetchExercises = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/exercises");
-        setExercises(response.data);
-        setFilteredExercises(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Lỗi tải bài tập:", error);
-        setError("Không thể tải danh sách bài tập. Vui lòng thử lại sau.");
-        setIsLoading(false);
-      }
-    };
-
-    fetchExercises();
-  }, []);
-
-  useEffect(() => {
-    if (selectedType === "all") {
-      setFilteredExercises(exercises);
-    } else {
-      setFilteredExercises(
-        exercises.filter((exercise) => exercise.type === selectedType)
-      );
-    }
-  }, [selectedType, exercises]);
 
   const exerciseTypes = [
     { value: "all", label: "Tất cả bài tập" },
@@ -44,67 +17,212 @@ const ExerciseList = () => {
     { value: "practice", label: "Thực hành" },
   ];
 
-  if (isLoading) {
-    return <div className="exercises-container">Đang tải...</div>;
-  }
+  const difficultyLevels = [
+    { value: "all", label: "Tất cả độ khó" },
+    { value: "Dễ", label: "Dễ" },
+    { value: "Trung bình", label: "Trung bình" },
+    { value: "Khó", label: "Khó" },
+  ];
 
-  if (error) {
-    return <div className="exercises-container">{error}</div>;
-  }
+  const filterExercises = () => {
+    let result = exercises;
+
+   
+    if (selectedType !== "all") {
+      result = result.filter((exercise) => exercise.type === selectedType);
+    }
+
+    if (selectedDifficulty !== "all") {
+      result = result.filter(
+        (exercise) => exercise.difficulty === selectedDifficulty
+      );
+    }
+
+ 
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (exercise) =>
+          exercise.title.toLowerCase().includes(query) ||
+          exercise.description.toLowerCase().includes(query)
+      );
+    }
+
+    setFilteredExercises(result);
+  };
+
+  useEffect(() => {
+    const fetchExercises = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:5000/api/exercises", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (!response.ok) {
+          const errText = await response.text();
+          console.error("Lỗi server:", errText);
+          throw new Error("Không thể tải bài tập.");
+        }
+  
+        const data = await response.json();
+  
+        const transformedData = data.map((item) => ({
+          _id: item._id,
+          title: item.title,
+          description: item.description,
+          type: item.type,
+          difficulty: item.difficulty || "Không rõ",
+          topic: item.topic,
+          points: item.totalPoints || 0,
+          deadline: item.deadline,
+          questionsCount: item.questions?.length || 0,
+          resourcesUrl: item.resourcesUrl || null,
+        }));
+  
+        setExercises(transformedData);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu bài tập:", error);
+      }
+    };
+  
+    fetchExercises();
+  }, []);
+
+
+  useEffect(() => {
+    filterExercises();
+  }, [selectedType, selectedDifficulty, searchQuery, exercises]);
 
   return (
     <div className="exercises-container">
-      <h2>Danh sách bài tập</h2>
-      
-      <div className="exercise-filter">
-        <label htmlFor="exercise-type">Lọc theo loại bài tập: </label>
-        <select
-          id="exercise-type"
-          value={selectedType}
-          onChange={(e) => setSelectedType(e.target.value)}
-        >
-          {exerciseTypes.map((type) => (
-            <option key={type.value} value={type.value}>
-              {type.label}
-            </option>
-          ))}
-        </select>
+      <div className="exercises-header">
+        <h2 className="title-name">Danh sách bài tập</h2>
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Tìm kiếm bài tập..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <span className="search-icon">🔍</span>
+        </div>
+      </div>
+
+      <div className="filters-container">
+        <div className="filter-group">
+          <label htmlFor="exercise-type">Loại bài tập:</label>
+          <select
+            id="exercise-type"
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+          >
+            {exerciseTypes.map((type) => (
+              <option key={type.value} value={type.value}>
+                {type.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label htmlFor="exercise-difficulty">Độ khó:</label>
+          <select
+            id="exercise-difficulty"
+            value={selectedDifficulty}
+            onChange={(e) => setSelectedDifficulty(e.target.value)}
+          >
+            {difficultyLevels.map((level) => (
+              <option key={level.value} value={level.value}>
+                {level.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {filteredExercises.length > 0 ? (
         <div className="exercises-list">
           {filteredExercises.map((exercise) => (
             <div key={exercise._id} className="exercise-item">
-              <h3>{exercise.title}</h3>
-              <div className="exercise-meta">
-                <span className={`exercise-type ${exercise.type}`}>
-                  {exerciseTypes.find(t => t.value === exercise.type)?.label || exercise.type}
-                </span>
-                {exercise.deadline && (
-                  <span className="exercise-deadline">
-                    Hạn chót: {new Date(exercise.deadline).toLocaleDateString()}
+              <div className="exercise-header">
+                <h3>{exercise.title}</h3>
+                <div className="exercise-meta">
+                  <span className={`exercise-type ${exercise.type}`}>
+                    {exerciseTypes.find((t) => t.value === exercise.type)
+                      ?.label || exercise.type}
                   </span>
-                )}
+                  <span
+                    className={`exercise-difficulty ${exercise.difficulty.toLowerCase()}`}
+                  >
+                    {exercise.difficulty}
+                  </span>
+                  <span className="exercise-points">
+                    ✨ {exercise.points} điểm
+                  </span>
+                  {exercise.questionsCount > 0 && (
+                    <span className="exercise-questions">
+                      ❓ {exercise.questionsCount} câu hỏi
+                    </span>
+                  )}
+                </div>
               </div>
-              <p>{exercise.description}</p>
-              <div className="exercise-actions">
-                <Link
-                  to={`/exercise/${exercise._id}`}
-                  className="btn btn-primary"
-                >
-                  Làm bài
-                </Link>
-                {exercise.type === "practice" && (
-                  <a href={exercise.resourcesUrl} className="btn btn-secondary">
-                    Tài liệu hướng dẫn
-                  </a>
+
+              <p className="exercise-description">{exercise.description}</p>
+
+              <div className="exercise-footer">
+                {exercise.deadline && (
+                  <div className="deadline-info">
+                    <span className="deadline-label">⏰ Hạn chót:</span>
+                    <span className="deadline-date">
+                      {new Date(exercise.deadline).toLocaleDateString("vi-VN", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
                 )}
+
+                <div className="exercise-actions">
+                  <Link
+                    to={`/exercise/detail/${exercise._id}`}
+                    className="btn btn-primary"
+                  >
+                    {exercise.type === "practice" ? "Bắt đầu thực hành" : "Làm bài"}
+                  </Link>
+                  {exercise.resourcesUrl && (
+                    <a
+                      href={exercise.resourcesUrl}
+                      className="btn btn-secondary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Tài liệu hướng dẫn
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <p>Không có bài tập nào thuộc loại này.</p>
+        <div className="no-results">
+          <p>Không tìm thấy bài tập phù hợp.</p>
+          <button
+            className="btn btn-reset"
+            onClick={() => {
+              setSelectedType("all");
+              setSelectedDifficulty("all");
+              setSearchQuery("");
+            }}
+          >
+            Đặt lại bộ lọc
+          </button>
+        </div>
       )}
     </div>
   );

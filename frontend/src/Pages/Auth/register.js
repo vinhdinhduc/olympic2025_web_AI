@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey, faEnvelope, faUser, faRightToBracket } from "@fortawesome/free-solid-svg-icons";
-import { registerUser } from '../api';
-import '../styles/register.css';
-import '../styles/globalstyles.css';
+import { registerUser } from '../../api';
+import '../../styles/globalstyles.css';
+import './register.css';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -32,7 +32,7 @@ const Register = () => {
     };
 
     return (
-        <div className="container d-flex justify-content-center align-items-center min-vh-100 body">
+        <div className="container-login d-flex justify-content-center align-items-center min-vh-100 body">
             <div className="register-container card grow-item p-4">
                 <h2 className="animation">ĐĂNG KÝ</h2>
                 <form onSubmit={handleRegister}>

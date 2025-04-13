@@ -8,10 +8,10 @@ import {faKey,faEnvelope, faRightToBracket, faUserPlus,faEyeSlash,faEye} from "@
 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { signInWithGoogle, signInWithGitHub } from "../config/firebase";
-
-import '../styles/login.css';
-import '../styles/globalstyles.css';
+import { signInWithGoogle, signInWithGitHub } from "../../config/firebase";
+import { loginUser } from '../../api';
+import '../../styles/globalstyles.css';
+import './login.css';
 
 const Login = () => {
     const [email,setEmail] = useState('');
@@ -47,7 +47,7 @@ const Login = () => {
         e.preventDefault();
         setError(""); // Reset lỗi trước khi gửi
     
-        // Xác thực phía client
+        
         if (!email || !password) {
             setError("Vui lòng nhập đầy đủ email và mật khẩu!");
             return;
@@ -59,10 +59,7 @@ const Login = () => {
         }
     
         try {
-            const response = await axios.post("http://localhost:5000/api/auth/login", {
-                email,
-                password,
-            });
+            const response = await loginUser(formData)
             console.log("Đăng nhập thành công:", response.data);
             // Lưu token vào localStorage
             localStorage.setItem("token", response.data.token);
@@ -73,7 +70,7 @@ const Login = () => {
                 role: response.data.role,
             }));     
     
-            navigate("/"); // Chuyển đến trang chính
+            navigate("/exercises/new"); // Chuyển đến trang chính
         } catch (err) {
             setError(err.response?.data?.message || "Đăng nhập thất bại!");
         }
@@ -84,8 +81,8 @@ const Login = () => {
 
     return (
         
-        <div className=" container d-flex justify-content-center align-items-center min-vh-100 bg-light body  ">
-            <div className="card grow-item p-4 bg-bg-secondary-subtle " style={{ width: "400px" }}>
+        <div className=" container-login d-flex justify-content-center align-items-center min-vh-100   ">
+            <div className="card grow-item p-4 bg-bg-secondary-subtle login-container" style={{ width: "400px" }}>
                 <h2 className="text-center mb-3 animation ">ĐĂNG NHẬP </h2>
                 <p className="text-center text-muted">Bạn chưa có tài khoản?
                     <a href="/register" className='link-register'><FontAwesomeIcon icon={faUserPlus}/> Đăng ký </a>
@@ -112,7 +109,7 @@ const Login = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <span className="password-toggle" onClick={togglePasswordVisibility} style={{ cursor: "pointer" }}>
+                            <span className="password-toggle" onClick={togglePasswordVisibility} >
                             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                             </span>
                        </div>

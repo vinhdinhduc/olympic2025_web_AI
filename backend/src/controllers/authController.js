@@ -2,7 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-// 🟢 Đăng ký người dùng
+//  Đăng ký người dùng
 const register = async (req, res) => {
     try {
         const { username, email, password, role } = req.body;
@@ -27,7 +27,8 @@ const register = async (req, res) => {
     }
 };
 
-// 🟢 Đăng nhập người dùng
+// 
+// Đăng nhập người dùng
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -64,7 +65,8 @@ const login = async (req, res) => {
     }
 };
 
-// 🟢 Lấy thông tin người dùng hiện tại
+//  Lấy thông tin người dùng hiện tại
+
 const getUserProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password");

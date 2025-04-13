@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import "../styles/navbar.css";
+import "./navbar.css";
 import logo from "../assets/image/logo.png";
 
 const Navbar = () => {

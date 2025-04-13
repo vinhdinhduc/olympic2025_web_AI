@@ -1,10 +1,11 @@
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const exerciseRoutes = require("./routes/exerciseRoutes");
+const connectDB = require("./config/database");
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,10 +20,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/exercises", exerciseRoutes);
 
 // Kết nối MongoDB
-mongoose
-    .connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.error("MongoDB connection error:", err));
+connectDB();
 
 // Trang chủ API
 app.get("/", (req, res) => {

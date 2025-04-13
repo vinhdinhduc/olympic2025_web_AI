@@ -1,5 +1,4 @@
 
-
 /* Hiệu ứng mờ cho form */
 .grow-item {
     -webkit-box-shadow: 0px 0px 230px 11px rgba(46, 213, 255, 0.84);
@@ -22,20 +21,22 @@
         text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff, 0 0 50px #0ff;
     }
 }
+.container-login{
+    background: linear-gradient(135deg,rgba(19,193,233,1) 0%,rgb(224, 255, 46) 100%);
+}
 
 .login-container {
     margin: 14px;
-    background: rgba(46, 213, 255, 0.9);
     backdrop-filter: blur(10px);
     padding: 30px;
-    border-radius: 15px;
+    border-radius: 35px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     width: 350px;
 }
 
 .login-container h2 {
     text-align: center;
-    color: white;
+    color: rgb(10, 8, 8);
     font-size: 24px;
     margin-bottom: 10px;
 }
@@ -45,7 +46,8 @@
     border: 1px solid rgba(15, 14, 14, 0.4);
     color: rgb(10, 10, 10);
     padding: 10px;
-    border-radius: 4px;
+    border-top-right-radius: 4px;
+    /* border-radius: 4px; */
 }
 
 .input-group {
@@ -56,13 +58,13 @@
 
 .password-toggle {
     position: absolute;
-    right: 15px; /* Tăng khoảng cách để tránh box-shadow */
-    top: 50%;
+    right: 15px; 
+    top: 28px;
     transform: translateY(-50%);
     cursor: pointer;
     user-select: none;
-    z-index: 2; /* Quan trọng: đặt cao hơn input:focus */
-    background: rgba(255, 255, 255, 0.8); /* Nền trong suốt chống lẫn */
+    /* z-index: 2;  */
+   
     padding: 0 5px;
     border-radius: 50%;
 }
@@ -73,7 +75,7 @@
  
 
 .form-control:focus {
-    z-index: 1;
+    /* z-index: 1; */
     border-color: rgb(0, 255, 191);
    
 }

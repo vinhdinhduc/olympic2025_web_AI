@@ -170,7 +170,7 @@
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.1);
-  color: white;
+  color: rgb(10, 8, 8);
   font-size: 16px;
   transition: border-color 0.3s;
 }
@@ -178,7 +178,7 @@
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: white;
+  /* border-color: white; */
 }
 
 .form-group textarea {

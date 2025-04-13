@@ -7,7 +7,7 @@ const { OpenAIApi, Configuration } = require("openai");
 // });
 // const openai = new OpenAIApi(configuration);
 
-// 🟢 Tạo bài tập mới
+//  Tạo bài tập mới
 const createExercise = async (req, res) => {
     try {
         const { title, description, type, topic, tags } = req.body;
@@ -113,7 +113,7 @@ const getAIBasedSuggestions = async (req, res) => {
     }
 };
 
-// 🟢 Lấy danh sách bài tập gợi ý (cải tiến thuật toán)
+//  Lấy danh sách bài tập gợi ý (cải tiến thuật toán)
 const getSuggestedExercises = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -149,7 +149,7 @@ const getSuggestedExercises = async (req, res) => {
     }
 };
 
-// 🟢 Lấy bài tập theo ID
+// 🟢Lấy bài tập theo ID
 const getExerciseById = async (req, res) => {
     try {
         const exercise = await Exercise.findById(req.params.id);
@@ -162,8 +162,16 @@ const getExerciseById = async (req, res) => {
         res.status(500).json({ message: "Lỗi server!" });
     }
 };
+const getAllExercises = async (req, res) => {
+    try {
+      const exercises = await Exercise.find();
+      res.json(exercises); // Đảm bảo trả về JSON hợp lệ
+    } catch (error) {
+      res.status(500).json({ message: "Lỗi server" });
+    }
+  };
 
-// 🟢 Cập nhật bài tập
+// Cập nhật bài tập
 const updateExercise = async (req, res) => {
     try {
         const updatedExercise = await Exercise.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -177,7 +185,7 @@ const updateExercise = async (req, res) => {
     }
 };
 
-// 🟢 Xóa bài tập (ĐÃ SỬA LỖI)
+//  Xóa bài tập (ĐÃ SỬA LỖI)
 const deleteExercise = async (req, res) => {
     try {
         const deletedExercise = await Exercise.findByIdAndDelete(req.params.id);
@@ -191,7 +199,7 @@ const deleteExercise = async (req, res) => {
     }
 };
 
-// 🟢 Nộp bài tập (ĐÃ SỬA - LƯU VÀO DB)
+//  Nộp bài tập (ĐÃ SỬA - LƯU VÀO DB)
 const submitExercise = async (req, res) => {
     try {
         if (req.user.role !== "student") {
@@ -231,5 +239,6 @@ module.exports = {
     updateExercise,
     deleteExercise,
     submitExercise,
-    getAIBasedSuggestions 
+    getAIBasedSuggestions ,
+    getAllExercises,
 };

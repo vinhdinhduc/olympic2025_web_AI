@@ -2,11 +2,11 @@ import React ,{ useEffect, useState }from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import "../styles/home.css"; 
-import Footer from '../components/footer';
-import home from '../assets/image/anh_bia.jpg';
-import Navbar from '../components/navbar';
+import { Link, Navigate } from "react-router-dom";
+import "./home.css"; 
+import Footer from '../../layouts/footer';
+import home from '../../assets/image/anh_bia.jpg';
+import Navbar from '../../layouts/navbar';
 
 const Home = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -47,6 +47,7 @@ const Home = () => {
             alert("Vui lòng đăng nhập để bắt đầu sử dụng!");
             
         }
+        Navigate("/exercises")
 
     }
   return (

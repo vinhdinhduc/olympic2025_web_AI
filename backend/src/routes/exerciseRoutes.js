@@ -8,7 +8,8 @@ const {
     updateExercise,
     deleteExercise,
     submitExercise,
-    getAIBasedSuggestions
+    getAIBasedSuggestions,
+    getAllExercises,
 } = require("../controllers/exerciseController");
 
 // 🟢 Tạo bài tập mới (Chỉ giáo viên mới được tạo)
@@ -19,8 +20,8 @@ router.get("/ai-suggestions", authMiddleware, getAIBasedSuggestions);
 router.get("/suggested", authMiddleware, getSuggestedExercises);
 
 // 🟢 Lấy bài tập theo ID
+router.get("/",authMiddleware, getAllExercises);
 router.get("/:id", authMiddleware, getExerciseById);
-
 // 🟢 Cập nhật bài tập
 router.put("/:id", authMiddleware, teacherMiddleware, updateExercise);
 

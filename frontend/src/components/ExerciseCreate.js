@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import '../styles/ExerciseCreate.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import './ExerciseCreate.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const ExerciseForm = () => {
+const ExerciseCreate = () => {
+    const { id } = useParams();
+    const isEditMode = Boolean(id);
     const [type, setType] = useState('multiple-choice');
     const [questions, setQuestions] = useState([{ questionText: '', options: ['', '', '', ''], correctAnswer: 0, points: 1 }]);
     const [formData, setFormData] = useState({
@@ -20,6 +23,47 @@ const ExerciseForm = () => {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+  
+    useEffect(() => {
+        if (isEditMode) {
+            const fetchExercise = async () => {
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await axios.get(`http://localhost:5000/api/exercises/${id}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    
+                    const exercise = response.data;
+                    setFormData({
+                        title: exercise.title,
+                        description: exercise.description,
+                        topic: exercise.topic,
+                        tags: exercise.tags?.join(', ') || '',
+                        deadline: exercise.deadline?.split('Z')[0] || '',
+                        guidelines: exercise.guidelines || '',
+                        wordLimit: exercise.wordLimit || 500,
+                        resourcesUrl: exercise.resourcesUrl || '',
+                        submissionType: exercise.submissionType || 'file',
+                        totalPoints: exercise.totalPoints || 10
+                    });
+                    
+                    setType(exercise.type);
+                    
+                    if (exercise.type === 'multiple-choice' && exercise.questions) {
+                        setQuestions(exercise.questions);
+                    }
+                } catch (err) {
+                    setError(err.response?.data?.message || 'Lỗi khi tải bài tập');
+                    console.error('Error fetching exercise:', err);
+                }
+            };
+            
+            fetchExercise();
+        }
+    }, [id, isEditMode]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -65,28 +109,60 @@ const ExerciseForm = () => {
             }
 
             const token = localStorage.getItem('token');
-            const response = await axios.post('http://localhost:5000/api/exercises', payload, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            let response;
+
+            if (isEditMode) {
+                response = await axios.put(`http://localhost:5000/api/exercises/${id}`, payload, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            } else {
+                response = await axios.post('http://localhost:5000/api/exercises', payload, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            }
 
             navigate(`/exercise/${response.data.exercise._id}`);
         } catch (err) {
-            setError(err.response?.data?.message || 'Lỗi khi tạo bài tập');
-            console.error('Error creating exercise:', err);
+            setError(err.response?.data?.message || `Lỗi khi ${isEditMode ? 'cập nhật' : 'tạo'} bài tập`);
+            console.error(`Error ${isEditMode ? 'updating' : 'creating'} exercise:`, err);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (window.confirm('Bạn có chắc chắn muốn xóa bài tập này?')) {
+            try {
+                const token = localStorage.getItem('token');
+                await axios.delete(`http://localhost:5000/api/exercises/${id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                navigate('/exercises');
+            } catch (err) {
+                setError(err.response?.data?.message || 'Lỗi khi xóa bài tập');
+                console.error('Error deleting exercise:', err);
+            }
         }
     };
 
     return (
         <div className="exercise-form-container">
-            <h2>Tạo Bài Tập Mới</h2>
+            <h2>{isEditMode ? 'Chỉnh Sửa Bài Tập' : 'Tạo Bài Tập Mới'}</h2>
             {error && <div className="error-message">{error}</div>}
             
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Loại bài tập:</label>
-                    <select value={type} onChange={handleTypeChange} required>
+                    <select 
+                        value={type} 
+                        onChange={handleTypeChange} 
+                        required
+                        disabled={isEditMode} // Không cho phép thay đổi loại bài tập khi chỉnh sửa
+                    >
                         <option value="multiple-choice">Trắc nghiệm</option>
                         <option value="essay">Tự luận</option>
                         <option value="practice">Thực hành</option>
@@ -283,10 +359,24 @@ const ExerciseForm = () => {
                     </div>
                 )}
 
-                <button type="submit" className="submit-btn">Tạo Bài Tập</button>
+                <div className="form-actions">
+                    <button type="submit" className="submit-btn">
+                        {isEditMode ? 'Cập Nhật Bài Tập' : 'Tạo Bài Tập'}
+                    </button>
+                    
+                    {isEditMode && (
+                        <button 
+                            type="button" 
+                            onClick={handleDelete}
+                            className="delete-btn"
+                        >
+                            Xóa Bài Tập
+                        </button>
+                    )}
+                </div>
             </form>
         </div>
     );
 };
 
-export default ExerciseForm;
+export default ExerciseCreate;

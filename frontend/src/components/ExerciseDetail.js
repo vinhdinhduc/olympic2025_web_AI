@@ -1,34 +1,208 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../styles/exercisesDetail.css";
+import "./exercisesDetail.css";
+
+const QuestionCard = ({ question, qIndex, selectedAnswers, submitted, handleAnswerSelect }) => {
+  return (
+    <div key={qIndex} className={`question-card ${submitted && selectedAnswers[qIndex] === question.correctAnswer ? 'correct' : ''} ${submitted && selectedAnswers[qIndex] !== undefined && selectedAnswers[qIndex] !== question.correctAnswer ? 'incorrect' : ''}`}>
+      <h4 className="question-text">{question.question}</h4>
+      <div className="options-container">
+        {question.options.map((option, oIndex) => (
+          <div 
+            key={oIndex} 
+            className={`option ${selectedAnswers[qIndex] === oIndex ? 'selected' : ''} ${submitted && oIndex === question.correctAnswer ? 'correct-answer' : ''}`}
+            onClick={() => !submitted && handleAnswerSelect(qIndex, oIndex)}
+          >
+            <span className="option-letter">
+              {String.fromCharCode(65 + oIndex)}.
+            </span>
+            {option}
+            {submitted && oIndex === question.correctAnswer && (
+              <span className="check-mark">✓</span>
+            )}
+          </div>
+        ))}
+      </div>
+      {submitted && (
+        <div className="explanation">
+          {selectedAnswers[qIndex] === question.correctAnswer ? (
+            <p className="feedback correct-feedback">Chính xác! Bạn đã chọn đáp án đúng.</p>
+          ) : (
+            <p className="feedback incorrect-feedback">
+              {selectedAnswers[qIndex] !== undefined 
+                ? `Sai rồi! Đáp án đúng là ${String.fromCharCode(65 + question.correctAnswer)}.` 
+                : `Bạn chưa chọn đáp án! Đáp án đúng là ${String.fromCharCode(65 + question.correctAnswer)}.`}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ExerciseDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [exercise, setExercise] = useState(null);
+  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/exercises/${id}`)
-      .then((response) => setExercise(response.data))
-      .catch((error) => console.error("Lỗi tải chi tiết bài tập:", error));
+    const fetchExercise = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const res = await axios.get(`http://localhost:5000/api/exercises/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+        
+        if (!res.data) {
+          throw new Error("Bài tập không tồn tại");
+        }
+        
+        setExercise(res.data);
+      } catch (err) {
+        console.error("Lỗi khi lấy bài tập:", err);
+        setError(err.response?.data?.message || err.message || "Lỗi khi tải bài tập");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExercise();
   }, [id]);
+
+  const handleAnswerSelect = (questionIndex, optionIndex) => {
+    setSelectedAnswers(prev => ({
+      ...prev,
+      [questionIndex]: optionIndex
+    }));
+  };
+
+  const handleSubmit = () => {
+    setSubmitted(true);
+  };
+
+  const calculateScore = () => {
+    if (!exercise) return 0;
+    
+    let correctCount = 0;
+    exercise.questions.forEach((question, index) => {
+      if (selectedAnswers[index] === question.correctAnswer) {
+        correctCount++;
+      }
+    });
+    
+    return Math.round((correctCount / exercise.questions.length) * 100);
+  };
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <p>Đang tải chi tiết bài tập...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <p className="error-message">{error}</p>
+        <button 
+          className="back-button"
+          onClick={() => navigate(-1)}
+        >
+          Quay lại
+        </button>
+      </div>
+    );
+  }
+
+  if (!exercise) {
+    return (
+      <div className="not-found-container">
+        <p>Không tìm thấy bài tập</p>
+        <button 
+          className="back-button"
+          onClick={() => navigate(-1)}
+        >
+          Quay lại
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="exercise-detail-container">
-      {exercise ? (
+      <div className="exercise-header">
+        <h2>{exercise.title}</h2>
+        <div className="exercise-meta">
+          <span className="badge">{exercise.type === "multiple-choice" ? "Trắc nghiệm" : "Tự luận"}</span>
+          <span className="time-limit">⏱️ {exercise.timeLimit} phút</span>
+          <span className="points">✨ {exercise.points} điểm</span>
+        </div>
+        <p className="exercise-description">{exercise.description}</p>
+      </div>
+
+      {exercise.questions?.length > 0 ? (
         <>
-          <h2>{exercise.title}</h2>
-          <p>{exercise.description}</p>
-          <h4>Câu hỏi:</h4>
-          <ul>
-            {exercise.questions.map((question, index) => (
-              <li key={index}>{question}</li>
+          <div className="questions-container">
+            {exercise.questions.map((question, qIndex) => (
+              <QuestionCard
+                key={qIndex}
+                question={question}
+                qIndex={qIndex}
+                selectedAnswers={selectedAnswers}
+                submitted={submitted}
+                handleAnswerSelect={handleAnswerSelect}
+              />
             ))}
-          </ul>
+          </div>
+
+          {!submitted ? (
+            <button 
+              className="submit-btn"
+              onClick={handleSubmit}
+              disabled={Object.keys(selectedAnswers).length < exercise.questions.length}
+            >
+              Nộp bài
+            </button>
+          ) : (
+            <div className="results-container">
+              <h3>Kết quả của bạn: {calculateScore()}%</h3>
+              <p>
+                Bạn đã trả lời đúng {Object.keys(selectedAnswers).filter(
+                  (qIndex) => selectedAnswers[qIndex] === exercise.questions[qIndex].correctAnswer
+                ).length} trên tổng số {exercise.questions.length} câu hỏi.
+              </p>
+              <button 
+                className="try-again-btn" 
+                onClick={() => {
+                  setSelectedAnswers({});
+                  setSubmitted(false);
+                }}
+              >
+                Làm lại bài tập
+              </button>
+            </div>
+          )}
         </>
       ) : (
-        <p>Đang tải chi tiết bài tập...</p>
+        <div className="no-questions">
+          <p>Bài tập này chưa có câu hỏi nào</p>
+          <button 
+            className="back-button"
+            onClick={() => navigate(-1)}
+          >
+            Quay lại
+          </button>
+        </div>
       )}
     </div>
   );
