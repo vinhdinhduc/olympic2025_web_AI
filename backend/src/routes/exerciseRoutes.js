@@ -12,23 +12,23 @@ const {
     getAllExercises,
 } = require("../controllers/exerciseController");
 
-// 🟢 Tạo bài tập mới (Chỉ giáo viên mới được tạo)
+// Tạo bài tập mới (Chỉ giáo viên mới được tạo)
 router.post("/", authMiddleware, teacherMiddleware, createExercise);
-// 🟢 Gợi ý bài tập bằng AI
+// Gợi ý bài tập bằng AI
 router.get("/ai-suggestions", authMiddleware, getAIBasedSuggestions);
-// 🟢 Lấy danh sách bài tập gợi ý
+// Lấy danh sách bài tập gợi ý
 router.get("/suggested", authMiddleware, getSuggestedExercises);
 
-// 🟢 Lấy bài tập theo ID
+// Lấy bài tập theo ID
 router.get("/",authMiddleware, getAllExercises);
 router.get("/:id", authMiddleware, getExerciseById);
-// 🟢 Cập nhật bài tập
+// Cập nhật bài tập
 router.put("/:id", authMiddleware, teacherMiddleware, updateExercise);
 
-// 🟢 Xóa bài tập
+// Xóa bài tập
 router.delete("/:id", authMiddleware, teacherMiddleware, deleteExercise);
 
-// 🟢 Nộp bài tập
+//  Nộp bài tập
 router.post("/submit/:exerciseId", authMiddleware, submitExercise);
 
 module.exports = router;

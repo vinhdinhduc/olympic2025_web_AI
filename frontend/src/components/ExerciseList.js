@@ -4,11 +4,11 @@ import "./excercisesList.css";
 
 const ExerciseList = () => {
   const [exercises, setExercises] = useState([]);
+  const [userRole, setUserRole] = useState("");
   const [filteredExercises, setFilteredExercises] = useState([]);
   const [selectedType, setSelectedType] = useState("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-
 
   const exerciseTypes = [
     { value: "all", label: "Tất cả bài tập" },
@@ -27,7 +27,6 @@ const ExerciseList = () => {
   const filterExercises = () => {
     let result = exercises;
 
-   
     if (selectedType !== "all") {
       result = result.filter((exercise) => exercise.type === selectedType);
     }
@@ -38,7 +37,6 @@ const ExerciseList = () => {
       );
     }
 
- 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
@@ -50,6 +48,37 @@ const ExerciseList = () => {
 
     setFilteredExercises(result);
   };
+  const handleDelete = async (exerciseId) => {
+    if (!window.confirm("Bạn có chắc chắn muốn xóa bài tập này?")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:5000/api/exercises/${exerciseId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Xóa bài tập thất bại");
+      }
+
+      // Cập nhật state sau khi xóa thành công
+      setExercises((prev) => prev.filter((ex) => ex._id !== exerciseId));
+    } catch (error) {
+      console.error("Lỗi khi xóa bài tập:", error);
+      alert("Xóa bài tập thất bại: " + error.message);
+    }
+  };
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    setUserRole(role);
+  }, []);
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -61,15 +90,15 @@ const ExerciseList = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         if (!response.ok) {
           const errText = await response.text();
           console.error("Lỗi server:", errText);
           throw new Error("Không thể tải bài tập.");
         }
-  
+
         const data = await response.json();
-  
+
         const transformedData = data.map((item) => ({
           _id: item._id,
           title: item.title,
@@ -82,16 +111,15 @@ const ExerciseList = () => {
           questionsCount: item.questions?.length || 0,
           resourcesUrl: item.resourcesUrl || null,
         }));
-  
+
         setExercises(transformedData);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu bài tập:", error);
       }
     };
-  
+
     fetchExercises();
   }, []);
-
 
   useEffect(() => {
     filterExercises();
@@ -192,8 +220,29 @@ const ExerciseList = () => {
                     to={`/exercise/detail/${exercise._id}`}
                     className="btn btn-primary"
                   >
-                    {exercise.type === "practice" ? "Bắt đầu thực hành" : "Làm bài"}
+                    {exercise.type === "practice"
+                      ? "Bắt đầu thực hành"
+                      : "Làm bài"}
                   </Link>
+
+                  {userRole === "teacher" && (
+                    <>
+                      <Link
+                        to={`/exercise/edit/${exercise._id}`}
+                        className="btn btn-warning"
+                      >
+                        Sửa
+                      </Link>
+
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => handleDelete(exercise._id)}
+                      >
+                        Xóa
+                      </button>
+                    </>
+                  )}
+
                   {exercise.resourcesUrl && (
                     <a
                       href={exercise.resourcesUrl}

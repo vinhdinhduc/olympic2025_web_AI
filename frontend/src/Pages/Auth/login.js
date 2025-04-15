@@ -59,9 +59,9 @@ const Login = () => {
         }
     
         try {
-            const response = await loginUser(formData)
+            const response = await loginUser({email, password});
             console.log("Đăng nhập thành công:", response.data);
-            // Lưu token vào localStorage
+        
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("role", response.data.role);
             localStorage.setItem("user", JSON.stringify({
@@ -70,7 +70,7 @@ const Login = () => {
                 role: response.data.role,
             }));     
     
-            navigate("/exercises/new"); // Chuyển đến trang chính
+            navigate("/exercises/new"); 
         } catch (err) {
             setError(err.response?.data?.message || "Đăng nhập thất bại!");
         }

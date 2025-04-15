@@ -15,9 +15,11 @@ router.post("/register", register);
 //Đăng nhập
 router.post("/login", login);
 
-// 🟢 Lấy thông tin người dùng hiện tại (yêu cầu xác thực)
+// Lấy thông tin người dùng hiện tại 
 router.get("/me", authMiddleware, getUserProfile);
+
 //Xac thực token
+
 router.get("/validate-token",validate)
 module.exports = router;
 

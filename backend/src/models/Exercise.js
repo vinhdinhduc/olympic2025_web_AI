@@ -18,15 +18,15 @@ const exerciseSchema = new mongoose.Schema({
     topic: { type: String, required: true },
     tags: [String],
     
-    // For multiple-choice exercises
+    
     questions: [questionSchema],
     totalPoints: Number,
     
-    // For essay exercises
+    
     guidelines: String,
     wordLimit: Number,
     
-    // For practice exercises
+  
     resourcesUrl: String,
     submissionType: { type: String, enum: ['file', 'url'] },
     

@@ -28,6 +28,7 @@ function App() {
   <Route path="/exercises" element={<ExerciseList />} />
 
         <Route path="/exercise/detail/:id" element={<ExerciseDetail />} />
+        <Route path="/exercise/edit/:id" element={<ExerciseCreate />} />
         <Route path="/profile" element={<Profile />} />
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/register" element={<Register />} />

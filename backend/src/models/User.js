@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
     completedExercises: [{ type: mongoose.Schema.Types.ObjectId, ref: "Exercise" }]
 }, { timestamps: true });
 
-// Kiểm tra model trước khi khởi tạo để tránh lỗi OverwriteModelError
+
 const User = mongoose.models.User || mongoose.model("User", UserSchema);
 
 module.exports = User;
