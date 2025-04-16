@@ -21,8 +21,8 @@ const Navbar = () => {
       setUser(null);
     }
   }, []);
-  console.log("isLoggin",isLoggedIn)
-  console.log("user",user)
+  console.log("isLoggin", isLoggedIn);
+  console.log("user", user);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -64,12 +64,18 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className={`nav-link ${isActive("/exercises")}`} to="/exercises">
+              <Link
+                className={`nav-link ${isActive("/exercises")}`}
+                to="/exercises"
+              >
                 Bài tập
               </Link>
             </li>
             <li className="nav-item">
-              <Link className={`nav-link ${isActive("/profile")}`} to="/profile">
+              <Link
+                className={`nav-link ${isActive("/profile")}`}
+                to="/profile"
+              >
                 Hồ sơ
               </Link>
             </li>
@@ -105,6 +111,20 @@ const Navbar = () => {
                       <li>
                         <Link className="dropdown-item" to="/grades">
                           Điểm
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                  {user?.role === "teacher" && (
+                    <>
+                      <li>
+                        <Link className="dropdown-item" to="/exercises/new">
+                          Tạo bài tập
+                        </Link>
+                      </li>
+                      <li>
+                        <Link className="dropdown-item" to="/grades">
+                          Xem điểm
                         </Link>
                       </li>
                     </>

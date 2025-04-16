@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Row, Col, Button } from "react-bootstrap";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./home.css";
 import Footer from "../../layouts/footer";
 import home from "../../assets/image/anh_bia.jpg";
@@ -12,6 +12,7 @@ const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState({});
+  const Navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -56,7 +57,7 @@ const Home = () => {
     if (!isLoggedIn) {
       alert("Vui lòng đăng nhập để bắt đầu sử dụng!");
     }
-    Navigate("/exercises");
+    Navigate("/dashboard");
   };
   return (
     <>

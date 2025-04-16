@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import "./excercisesList.css";
 
 const ExerciseList = () => {
   const [exercises, setExercises] = useState([]);
+  const navigate = useNavigate();
   const [userRole, setUserRole] = useState("");
   const [filteredExercises, setFilteredExercises] = useState([]);
   const [selectedType, setSelectedType] = useState("all");
@@ -127,6 +131,9 @@ const ExerciseList = () => {
 
   return (
     <div className="exercises-container">
+      <button className="back-button" onClick={() => navigate("/")}>
+        <FontAwesomeIcon icon={faArrowLeft} /> Quay lại Trang Chủ
+      </button>
       <div className="exercises-header">
         <h2 className="title-name">Danh sách bài tập</h2>
         <div className="search-box">

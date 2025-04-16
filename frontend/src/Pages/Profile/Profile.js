@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './profile.css';
-import anhbia from '../../assets/image/anh_bia.jpg';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import "./profile.css";
+import anhbia from "../../assets/image/anh_bia.jpg";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Profile = () => {
- 
   const sampleUser = {
     _id: "123456",
     name: "Đinh Đức Vình",
@@ -52,6 +53,7 @@ const Profile = () => {
   };
 
   const [user, setUser] = useState(sampleUser);
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user.name,
@@ -87,6 +89,9 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
+      <button className="back-button" onClick={() => navigate("/")}>
+        <FontAwesomeIcon icon={faCircleLeft} /> Quay lại
+      </button>
       <div className="profile-header">
         {isEditing ? (
           <form onSubmit={handleSubmit} className="profile-form">
@@ -188,10 +193,7 @@ const Profile = () => {
               </div>
             </div>
 
-            <button
-              className="edit-btn"
-              onClick={() => setIsEditing(true)}
-            >
+            <button className="edit-btn" onClick={() => setIsEditing(true)}>
               Chỉnh sửa hồ sơ
             </button>
           </>
@@ -209,9 +211,7 @@ const Profile = () => {
                     <h3>{exercise.title}</h3>
                   </Link>
                   <p>{exercise.description}</p>
-                  <span
-                    className={`exercise-type ${exercise.type}`}
-                  >
+                  <span className={`exercise-type ${exercise.type}`}>
                     {exercise.type === "multiple-choice"
                       ? "Trắc nghiệm"
                       : exercise.type === "essay"

@@ -66,6 +66,7 @@
 }
 
 .mcq-section {
+  display: block;
   background: #f8fafc;
   padding: 20px;
   border-radius: 8px;
@@ -144,6 +145,9 @@
 }
 
 .delete-btn {
+  font-size: 18px;
+  margin-top: 30px;
+  padding:15px;
   background: #ff5252;
   color: white;
 }
